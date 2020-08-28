@@ -34,6 +34,10 @@ contract KickstarterGovernance {
     address public immutable comp;
     address public immutable governor;
 
+    /// @notice An event thats emitted when an account changes its delegate
+    event NewDelegation();
+    event ProposalCreated(uint proposalId);
+
     constructor(address[] memory targets_,
                 uint[] memory values_,
                 string[] memory signatures_,
@@ -55,12 +59,17 @@ contract KickstarterGovernance {
     function delegateToProposalBySig(uint nonce, uint expiry, uint8 v, bytes32 r, bytes32 s) external returns (Error, uint) {
         IComp(comp).delegateBySig(address(this), nonce, expiry, v, r, s);
 
+        emit NewDelegation();
+
         return submitProposal();
     }
 
     function submitProposal() public returns (Error, uint) {
         if (IComp(comp).getCurrentVotes(address(this)) >= IGovernorAlpha(governor).proposalThreshold()) {
            uint proposalId = IGovernorAlpha(governor).propose(targets, values, signatures, calldatas, description);
+
+           emit ProposalCreated(proposalId);
+
            return(Error.NO_ERROR, proposalId);
         }
         return(Error.NOT_ENOUGH_DELEGATIONS, 0);
