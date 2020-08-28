@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0
+
 pragma solidity ^0.6.10;
 pragma experimental ABIEncoderV2;
 
@@ -9,6 +11,11 @@ interface IComp {
 interface IGovernorAlpha {
     function proposalThreshold() external pure returns (uint);
     function propose(address[] memory targets, uint[] memory values, string[] memory signatures, bytes[] memory calldatas, string memory description) external returns (uint);
+}
+
+enum Error {
+    NO_ERROR,
+    NOT_ENOUGH_DELEGATIONS
 }
 
 contract KickstarterGovernance {
@@ -45,18 +52,18 @@ contract KickstarterGovernance {
         proposalAuthor = msg.sender;
     }
 
-    function delegateToProposalBySig(uint nonce, uint expiry, uint8 v, bytes32 r, bytes32 s) public {
+    function delegateToProposalBySig(uint nonce, uint expiry, uint8 v, bytes32 r, bytes32 s) external returns (Error, uint) {
         IComp(comp).delegateBySig(address(this), nonce, expiry, v, r, s);
-        //TODO maybe add `submit proposal` here with check of votes the
+
+        return submitProposal();
     }
 
-    function submitProposal() public returns (uint) {
-        uint proposalId = 0;
+    function submitProposal() public returns (Error, uint) {
         if (IComp(comp).getCurrentVotes(address(this)) >= IGovernorAlpha(governor).proposalThreshold()) {
-           proposalId = IGovernorAlpha(governor).propose(targets, values, signatures, calldatas, description);
+           uint proposalId = IGovernorAlpha(governor).propose(targets, values, signatures, calldatas, description);
+           return(Error.NO_ERROR, proposalId);
         }
-
-        return proposalId;
+        return(Error.NOT_ENOUGH_DELEGATIONS, 0);
     }
 
 }
