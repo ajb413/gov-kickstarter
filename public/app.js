@@ -45,8 +45,8 @@ window.addEventListener('load', () => {
 
     const mySignature = {};
 
-    const compAddress = '0xc00e94Cb662C3520282E6f5717214004A7f26888';
-    const proposingContractAddress = '0x1234567890000000000000000000000123456789';
+    const compAddress = '0x61460874a7196d6a22d1ee4922473664b3e95270';
+    const proposingContractAddress = '0x9c3dd2443CC4AD16d367105bBd89Ae8077f2B069';
     const compAbi = window.compAbi;
     const comp = new web3.eth.Contract(compAbi, compAddress);
 
