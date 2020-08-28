@@ -1,0 +1,96 @@
+@font-face {
+  font-family: 'Haas Grot Disp R';
+  src: url("/fonts/NeueHaasGrotDispRound-55Roman.otf");
+  font-style: normal;
+  font-weight: 500; }
+
+@font-face {
+  font-family: 'Haas Grot Disp R';
+  src: url("/assets/fonts/NeueHaasGrotDispRound-65Medium.otf");
+  font-style: medium;
+  font-weight: 700; }
+
+@font-face {
+  font-family: 'Haas Grot Text R';
+  src: url("/assets/fonts/NeueHaasGrotTextRound-55Roman.otf");
+  font-style: normal;
+  font-weight: 500; }
+
+@font-face {
+  font-family: 'Haas Grot Text R';
+  src: url("/assets/fonts/NeueHaasGrotTextRound-65Medium.otf");
+  font-style: medium;
+  font-weight: 600; }
+
+@font-face {
+  font-family: 'Haas Grot Text R';
+  src: url("/assets/fonts/NeueHaasGrotTextRound-75Bold.otf");
+  font-style: bold;
+  font-weight: 700; }
+
+body {
+  font-family: 'Haas Grot Text R';
+  background-color: #000000;
+  color: #FFFFFF;
+}
+
+h1 {
+  font-size: 30px;
+}
+
+.header {
+  margin-top: 28px;
+  width: 100%;
+  height: 50px;
+  background-color: #000000;
+}
+
+.header .title {
+  display: table;
+  margin: auto;
+}
+
+.header .title > * {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.header .title .logo {
+  background-image: url(./assets/compound-logo.svg);
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-color: transparent;
+  width: 127px;
+  height: 27px;
+}
+
+.header .title .center {
+  margin: 0px 8px;
+  height: 36px;
+  opacity: 0.4;
+  border: 1px solid #657786
+}
+
+.header .title .text {
+  margin-top: 3px;
+  font-weight: 500;
+  font-size: 20px;
+  color: #CCD6DD;
+}
+
+.fold {
+  width: 100%;
+  min-height: 75%;
+  max-height: 25%;
+  background-color: #F9FAFB;
+  position: absolute;
+}
+
+.main {
+  width: 100%;
+  max-width: 1130px;
+  padding: 20px;
+  min-height: 200px;
+  display: block;
+  margin: auto;
+}
