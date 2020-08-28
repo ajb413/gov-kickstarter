@@ -92,7 +92,7 @@ async function delegate(nonce, expiry, v, r, s) {
   try {
     return await signAndSend(trx, testnetKey, testnetWeb3);
   } catch (e) {
-    console.debug({transaction});
+    console.debug({trx});
     console.warn('Failed to delegate by signature');
     console.warn(e);
   }

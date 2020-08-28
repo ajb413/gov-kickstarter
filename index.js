@@ -21,7 +21,7 @@ app.post('/signature/', async (req, res) => {
   const r = req.body.r || "0x655b304ad68d8f16dd7b268a8176e0f972728c16ec54e0e6831b8d6f98159679";
   const s = req.body.s || "0x4701e1a63a1be5e73fe4b236572cb9e8192d7e1ea13314439e1d08fb94fc5afd";
 
-  const delegateRes = await delegate(trx, testnetKey, testnetWeb3);
+  const delegateRes = await delegate(nonce, expiry, v, r, s);
 
   // Post the signature on-chain using web3
 
