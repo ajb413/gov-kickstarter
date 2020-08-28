@@ -6,6 +6,19 @@
 </head>
 <body>
 
+  <div id="modal" class="modal hidden">
+    <div class="inner-modal">
+      <div class="header">Sign Delegation with MetaMask</div>
+      <div class="mm"></div>
+      <div id="spinner" class="spinner">
+        <div class="inner-spinner">
+          <div></div>
+        </div>
+      </div>
+      <div id="submit-signature" class="submit hidden">Submit Signature</div>
+    </div>
+  </div>
+
   <div class="header">
     <div class="title">
       <div class="logo"></div>
@@ -25,7 +38,6 @@
     </div>
     <div class="delegate" id="create-signature">delegate</div>
     <p id="signature-display"></p>
-    <button id="submit-signature">Submit Signature</button>
     <div class="progbar">
       <div class="text-left">Delegated Votes</div>
       <div class="text-right">40000 / 100000</div>

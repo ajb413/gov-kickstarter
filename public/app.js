@@ -1,6 +1,8 @@
 const createSignature = document.getElementById('create-signature');
 const signatureDisplay = document.getElementById('signature-display');
 const submitSignature = document.getElementById('submit-signature');
+const modal = document.getElementById('modal');
+const spinner = document.getElementById('spinner');
 
 const createDelegateBySigMessage = (compAddress, delegatee, expiry = 10e9, chainId = 1, nonce = 0) => {
   const types = {
@@ -24,6 +26,8 @@ const createDelegateBySigMessage = (compAddress, delegatee, expiry = 10e9, chain
 };
 
 window.addEventListener('load', () => {
+
+  let alreadyDelegated = false;
 
   if (typeof window.ethereum === 'undefined') {
     console.error('Client does not have an active Web3 provider or the example app is not being run from an HTTP server.');
@@ -56,6 +60,13 @@ window.addEventListener('load', () => {
     myAddress = myAccount;
 
     createSignature.onclick = async () => {
+      if (alreadyDelegated) {
+        return;
+      }
+
+      modal.classList.remove('hidden');
+      document.getElementsByTagName("BODY")[0].classList.add('modal-open');
+
       const _delegatee = proposingContractAddress;
       const _nonce = await comp.methods.nonces(myAccount).call();
       const _expiry = 10e9; // expiration of signature, in seconds since unix epoch
@@ -84,7 +95,10 @@ window.addEventListener('load', () => {
         mySignature.expiry = _expiry;
         mySignature.signature = sig;
 
-        signatureDisplay.innerText = sig;
+        spinner.classList.add('hidden');
+        submitSignature.classList.remove('hidden');
+
+        // signatureDisplay.innerText = sig;
 
         console.log('signature', sig);
         console.log('msgParams', JSON.parse(msgParams));
@@ -135,6 +149,13 @@ window.addEventListener('load', () => {
       } catch(err) {
         console.error('POST signature error:', err);
       }
+
+      modal.classList.add('hidden');
+      document.getElementsByTagName("BODY")[0].classList.remove('modal-open');
+
+      alreadyDelegated = true;
+
+      createSignature.classList.add('no-button');
     };
   }
 });
