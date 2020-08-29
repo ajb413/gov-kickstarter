@@ -53,7 +53,7 @@ app.post('/signature/', async (req, res) => {
   try {
     let tx = await kickstarter.methods.submitProposal().send({
       from: myWalletAddress,
-      gasLimit: web3.utils.toHex(150000),
+      gasLimit: web3.utils.toHex(550000),
       gasPrice: web3.utils.toHex(20000000000),
     });
 
