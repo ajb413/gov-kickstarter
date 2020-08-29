@@ -6,7 +6,7 @@ const kickstarterAbi = require('./kickstarter.json');
 const kickstarterAddress = '0x02630b576b136d01Fe0BDD784a35dd4ec4952809';
 const compAddress = '0x61460874a7196d6a22D1eE4922473664b3E95270';
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 80;
 
 // Serve front-end web files from the public folder
 app.use(express.static('public'));
