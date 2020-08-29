@@ -1,6 +1,10 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const { delegate } = require('./delegate');
+const Web3 = require('web3');
+const compAbi = require('./compAbi.json');
+const kickstarterAbi = require('./kickstarter.json');
+const kickstarterAddress = '0x02630b576b136d01Fe0BDD784a35dd4ec4952809';
+const compAddress = '0x61460874a7196d6a22D1eE4922473664b3E95270';
 const app = express();
 const port = 3000;
 
@@ -11,21 +15,52 @@ app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+const web3 = new Web3('https://kovan-eth.compound.finance/');
+const testnetKey = '57df88dc21bfec871829bbb2f26d7dbb3e5e034667a3264c11ff5c2c18968828';
+web3.eth.accounts.wallet.add('0x' + testnetKey);
+const myWalletAddress = web3.eth.accounts.wallet[0].address;
+
+const comp = new web3.eth.Contract(compAbi, compAddress);
+const kickstarter = new web3.eth.Contract(kickstarterAbi, kickstarterAddress);
+
 app.post('/signature/', async (req, res) => {
 
   console.log(req.body);
 
-  const nonce = req.body.nonce || 0;
-  const expiry = req.body.expiry || 10000000000;
-  const v = req.body.v || "0x1b";
-  const r = req.body.r || "0x655b304ad68d8f16dd7b268a8176e0f972728c16ec54e0e6831b8d6f98159679";
-  const s = req.body.s || "0x4701e1a63a1be5e73fe4b236572cb9e8192d7e1ea13314439e1d08fb94fc5afd";
+  const delegatee = req.body.delegatee;
+  const nonce = req.body.nonce;
+  const expiry = req.body.expiry;
+  const v = req.body.v;
+  const r = req.body.r;
+  const s = req.body.s;
 
-  const delegateRes = await delegate(nonce, expiry, v, r, s);
+  res.send(200);
 
-  // Post the signature on-chain using web3
+  try {
+    let tx = await comp.methods.delegateBySig(
+      delegatee, nonce, expiry, v, r, s
+    ).send({
+      from: myWalletAddress,
+      gasLimit: web3.utils.toHex(150000),
+      gasPrice: web3.utils.toHex(20000000000),
+    });
 
-  // Poke the smart contract (needs to know the address)
+    console.log('post signature: ', tx.transactionHash);
+  } catch(e) {
+    console.error('Error posting signature: ', e);
+  }
+
+  try {
+    let tx = await kickstarter.methods.submitProposal().send({
+      from: myWalletAddress,
+      gasLimit: web3.utils.toHex(150000),
+      gasPrice: web3.utils.toHex(20000000000),
+    });
+
+    console.log('submit proposal:', tx.transactionHash);
+  } catch(e) {
+    console.error('Error submitting proposal: ', e);
+  }
 
 });
 

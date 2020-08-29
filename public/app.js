@@ -50,7 +50,7 @@ window.addEventListener('load', () => {
     const mySignature = {};
 
     const compAddress = '0x61460874a7196d6a22d1ee4922473664b3e95270';
-    const proposingContractAddress = '0x9c3dd2443CC4AD16d367105bBd89Ae8077f2B069';
+    const proposingContractAddress = '0x02630b576b136d01Fe0BDD784a35dd4ec4952809';
     const compAbi = window.compAbi;
     const comp = new web3.eth.Contract(compAbi, compAddress);
 
@@ -58,6 +58,10 @@ window.addEventListener('load', () => {
     const myAccount = accounts[0];
 
     myAddress = myAccount;
+
+    let votes = await comp.methods.getCurrentVotes(proposingContractAddress).call();
+
+    console.log('votes', votes);
 
     createSignature.onclick = async () => {
       if (alreadyDelegated) {
