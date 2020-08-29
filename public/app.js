@@ -3,6 +3,8 @@ const signatureDisplay = document.getElementById('signature-display');
 const submitSignature = document.getElementById('submit-signature');
 const modal = document.getElementById('modal');
 const spinner = document.getElementById('spinner');
+const progbar = document.getElementById('progbar');
+const voteNumber = document.getElementById('vote-number');
 
 const createDelegateBySigMessage = (compAddress, delegatee, expiry = 10e9, chainId = 1, nonce = 0) => {
   const types = {
@@ -59,7 +61,12 @@ window.addEventListener('load', () => {
 
     myAddress = myAccount;
 
-    let votes = await comp.methods.getCurrentVotes(proposingContractAddress).call();
+    let votes = await comp.methods.getCurrentVotes(proposingContractAddress).call() / 1e18;
+    let percent = parseInt((votes / 100000) * 100);
+
+    voteNumber.innerText = (parseInt(votes)).toString();
+
+    progbar.style = `width: ${percent}%`;
 
     console.log('votes', votes);
 
